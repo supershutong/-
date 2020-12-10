@@ -30,11 +30,12 @@ function window_it(fn, time = 50) {
         setTimeout(() => {
           // 调用函数
           Object.keys(w).forEach(key => {
-            const { func, args, resolvers } = w[key]
+            const { func, args, resolvers } = w[key]  // 解析相同参数的请求
             console.log('run once ----')
-            func(...args)
+            func(...args)  // 请求只执行一次
               .then(res => res.text())
               .then(text => {
+                // 不同请求的回调函数要依次执行
                 resolvers.forEach(r => {
                   console.log('result anywhere ----')
                   r(text)
