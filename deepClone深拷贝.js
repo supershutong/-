@@ -14,7 +14,7 @@ function deepClone(obj, map = new WeakMap()) {
   if (obj instanceof RegExp) return new RegExp(obj.source, obj.flags)
   if (obj instanceof Date) return new Date(obj)
 
-  if (map.get(obj)) return map.get(obj) // 解决循环引用
+  if (map.get(obj)) return map.get(obj) // map解决循环引用
 
   if (obj instanceof Function) {
     return function () {
@@ -61,7 +61,7 @@ const source = {
     map
   }
 }
-source.source = source
+source.source = source // 循环引用测试
 const newObj = deepClone(source)
 console.log(newObj.meta.ary[2] === source.meta.ary[2]) // false
 console.log(newObj.meta.birth === source.meta.birth) // false
