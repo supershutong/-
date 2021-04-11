@@ -32,7 +32,7 @@ function fetchLimit(urls = [], maxNum) {
     }
   })
 }
-
+// 测试用例
 let target = 'https://www.baidu.com'
 let urls = Array(100).fill(target)
 fetchLimit(urls, 5).then(res => {
