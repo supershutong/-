@@ -1,8 +1,8 @@
 class Scheduler {
   constructor(limit) {
-    this.limit = limit
+    this.limit = limit // 任务调度器允许并行的最大个数
     this.count = 0
-    this.list = []
+    this.list = [] // 待执行决议
   }
 
   async add(fn) {
@@ -17,7 +17,7 @@ class Scheduler {
     this.count++
     const result = await fn()
     if (this.list.length > 0) {
-      this.list.shift()()
+      this.list.shift()() // 此处用两个括号执行resolve
     }
     this.count--
     return result
