@@ -3,9 +3,9 @@
   潜在问题：假若拷贝的属性是引用类型，拷贝的就是内存地址，修改内容会互相影响。
 */
 function shallowClone(target) {
+  let result = Array.isArray(target) ? [] : {}
   if (typeof target === 'object' && target !== null) {
     // 方法一，循环key
-    let result = Array.isArray(target) ? [] : {}
     for (let k in target) {
       if (target.hasOwnProperty(k)) {
         // 是否是自身属性（非继承）
@@ -13,19 +13,23 @@ function shallowClone(target) {
       }
     }
 
-    /* 方法二
-      let result = Array.isArray(target) ? [] : {}
-      Object.assign(result, target)
-    */
+    // // 方法二
+    // Object.assign(result, target)
 
-    /* 方法三
-      result = Array.isArray(target) ? [...target] : { ...target }
-    */
-
-    return result
-  } else {
-    return target // 基本类型，直接返回
+    // // 方法三
+    // result = Array.isArray(target) ? [...target] : { ...target }
   }
+  return target // 基本类型，直接返回
+}
+
+function shallowClone(target) {
+  if (typeof target === 'object' && target !== null) {
+    let res = Array.isArray(target) ? [] : {}
+    Reflect.ownKeys(res).forEach(key => {
+      res[key] = target[key]
+    })
+  }
+  return target
 }
 
 let target1 = true,
