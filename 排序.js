@@ -5,7 +5,9 @@ function bubbleSort(arr) {
   for (let i = len; i >= 2; i--) {
     for (let j = 0; j < i - 1; j++) {
       // 前一个比后一个大，则交换位置，即较大数靠后放
-      if (arr[j] > arr[j + 1]) [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+      if (arr[j] > arr[j + 1]) {
+        ;[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+      }
     }
   }
   return arr
@@ -43,7 +45,7 @@ function insertSort(arr) {
 
 /* 4、快速排序 时间：O(nlogn)，空间：O(logn)
   实现思路：选择基准值 mid，循环原数组，小于基准值放左边数组，大于放右边数组，
-          然后 concat 组合，最后依靠递归完成排序。
+          然后 concat 组合，最后递归。
  */
 function quickSort(arr) {
   if (arr.length <= 1) return arr
@@ -60,8 +62,24 @@ function quickSort(arr) {
   return quickSort(left).concat(mid, quickSort(right))
 }
 
+/**
+ * 5、快速排序 ES6版本 时间：O(nlogn)，空间：O(logn)
+ * 实现思路：选择基准值 mid，循环原数组，小于基准值放左边数组，大于放右边数组，
+ *          递归
+ */
+function quickSortEs6(arr) {
+  if (!arr.length) return []
+  const [mid, ...rest] = arr
+  return [
+    ...quickSortEs6(rest.filter(e => e < mid)),
+    mid,
+    ...quickSortEs6(rest.filter(e => e >= mid))
+  ]
+}
+
 let arr = [2, 1, 3, 5, 3, 3, 7, 4, -6]
 console.log(bubbleSort(arr))
 console.log(selectSort(arr))
 console.log(insertSort(arr))
 console.log(quickSort(arr))
+console.log(quickSortEs6(arr))
