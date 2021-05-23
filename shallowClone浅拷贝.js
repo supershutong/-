@@ -23,13 +23,12 @@ function shallowClone(target) {
 }
 
 function shallowClone(target) {
-  if (typeof target === 'object' && target !== null) {
-    let res = Array.isArray(target) ? [] : {}
-    Reflect.ownKeys(res).forEach(key => {
-      res[key] = target[key]
-    })
-  }
-  return target
+  if (!(target instanceof Object)) return target
+  const res = Array.isArray(target) ? [] : {}
+  Reflect.ownKeys(target).forEach(key => {
+    res[key] = target[key]
+  })
+  return res
 }
 
 let target1 = true,
