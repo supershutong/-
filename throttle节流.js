@@ -1,12 +1,13 @@
 // 节流：指定时间内只触发一次，多次触发不执行。
 // 核心：开关锁
-function throttle(func, delay) {
-  let flag = true
+function throttle(fn, delay) {
+  let flag = false,
+    timer = null // 未执行
   return function (...args) {
-    if (!flag) return
-    flag = false
-    setTimeout(() => {
-      func(...args)
+    if (flag) return
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
       flag = true // 核心
     }, delay)
   }
