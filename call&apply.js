@@ -27,7 +27,7 @@ Function.prototype.myapply = function () {
 let arr1 = [1, 2, 3]
 let arr2 = [4, 5, 6]
 
-let max = Math.max.call2(null, arr1, arr2)
+let max = Math.max.mycall(arr1)
 console.log(max) // 3
 
 Array.prototype.push.myapply(arr1, arr2)
