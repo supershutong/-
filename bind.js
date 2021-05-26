@@ -6,11 +6,10 @@
 */
 Function.prototype.mybind = function () {
   if (typeof this !== 'function') throw `${this} must be a function`
+  let context = arguments[0] || globalThis
+  let args = [...arguments].slice(1) // 3、可传入参数
   let self = this
-  let context = arguments[0]
-  let args = Array.prototype.slice.call(arguments, 1) // 3、可传入参数
-  let fn = function () {
-    let fnArgs = Array.prototype.slice.call(arguments) // 4、获取bind后返回函数的参数，即fn的参数
+  let fn = function (...fnArgs) {
     self.apply(this instanceof self ? this : context, args.concat(fnArgs)) // 1、可以指定this；4、柯里化参数拼接
   }
   fn.prototype = Object.create(self.prototype) // bind返回函数可new，原型指向新的与self相同的原型连
