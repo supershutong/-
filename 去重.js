@@ -32,10 +32,16 @@ function unique(arr) {
   return [...new Set(arr)]
 }
 
-// 5、Map
+// 5、Map + filter
 function unique(arr) {
-  let remain = new Map()
-  return arr.filter(item => !remain.has(item) && remain.set(item, true))
+  let tmp = new Map()
+  return arr.filter(item => !tmp.has(item) && tmp.set(item, true))
+}
+
+// 6、Set + filter
+function unique(arr) {
+  let tmp = new Set()
+  return arr.filter(item => !tmp.has(item) && tmp.add(item))
 }
 
 let arr = [2, 1, 3, 5, 3, 3, 7, 4, -6]
