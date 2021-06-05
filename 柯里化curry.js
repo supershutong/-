@@ -3,19 +3,17 @@
   好处：减少代码冗余，增加可读性，是一种简洁的实现函数委托的方式。
 */
 function curry(fn) {
-  let len = fn.length
+  const len = fn.length // Function.length:函数的形参个数
 
-  return function curryFn() {
-    let innerLength = arguments.length
-    let args = Array.prototype.slice.call(arguments)
-
-    if (innerLength >= len) {
+  return function curryFn(...outerArgs) {
+    outerArgs = Array.prototype.slice.call(outerArgs)
+    if (outerArgs.length >= len) {
       // 递归出口
-      return fn.apply(null, args)
+      return fn.apply(null, outerArgs)
     } else {
-      return function () {
-        let allArgs = args.concat(Array.prototype.slice.call(arguments))
-        return curryFn.apply(null, allArgs)
+      return function (...innerArgs) {
+        innerArgs = Array.prototype.slice.call(innerArgs)
+        return curryFn.apply(null, outerArgs.concat(innerArgs))
       }
     }
   }
