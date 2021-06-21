@@ -10,11 +10,11 @@
 // Map 强引用，需要手动清除属性才能释放内存。
 // WeakMap 弱引用，随时可能被垃圾回收，使内存及时释放，是解决循环引用的不二之选。
 function deepClone(obj, map = new WeakMap()) {
-  if (!(obj instanceof Object)) return obj // 基本类型
+  if (!obj instanceof Object) return obj // 基本类型
   if (obj instanceof RegExp) return new RegExp(obj.source, obj.flags)
   if (obj instanceof Date) return new Date(obj)
 
-  if (map.get(obj)) return map.get(obj) // 解决循环引用
+  if (map.get(obj)) return map.get(obj) // map解决循环引用
 
   if (obj instanceof Function) {
     return function () {
@@ -22,7 +22,7 @@ function deepClone(obj, map = new WeakMap()) {
     }
   }
 
-  const res = new obj.constructor() // 挂载原型链，处理数组、普通对象、Set、Map
+  const res = new obj.constructor() // 挂载原型链，数组/普通对象/Set/Map处理
   obj instanceof Object && map.set(obj, res) // 此处判断不能少
 
   if (obj instanceof Set) {
@@ -30,14 +30,12 @@ function deepClone(obj, map = new WeakMap()) {
       res.add(deepClone(item, map))
     })
   }
-
   if (obj instanceof Map) {
     obj.forEach((item, key) => {
       res.set(deepClone(key, map), deepClone(item, map))
     })
   }
-
-  Reflect.ownKeys(obj).forEach(key => {
+  Object.keys(obj).forEach(key => {
     if (obj[key] instanceof Object) {
       res[key] = deepClone(obj[key], map)
     } else {
@@ -46,6 +44,10 @@ function deepClone(obj, map = new WeakMap()) {
   })
 
   return res
+}
+
+function deepClone(obj, map = new WeakMap()) {
+  if (typeof obj !== 'object' || obj === null) return obj
 }
 
 // 测试用例
