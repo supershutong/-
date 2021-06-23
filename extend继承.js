@@ -86,6 +86,10 @@ People.prototype.getName = function () {
 function Child(name, age) {
   People.call(this, name)
   this.age = age
+  // 子类公有方法
+  this.getAge = function () {
+    return this.age
+  }
 }
 function inheritPrototype(subType, superType) {
   const prototype = Object.create(superType.prototype)
