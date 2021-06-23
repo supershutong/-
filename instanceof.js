@@ -4,7 +4,7 @@
  */
 function myinstanceof(left, right) {
   if (typeof left !== 'object' || left === null) return false // 基础类型直接返回false
-  let proto = Object.getPrototypeOf(left) // 获取对象原型
+  let proto = Object.getPrototypeOf(left) // getPrototypeOf获取对象原型，__proto__已废弃
   while (true) {
     if (proto === null) return false
     if (proto === right.prototype) return true

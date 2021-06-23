@@ -11,8 +11,9 @@ function myNew(ctor) {
   // 1、创建空对象 {}
   let obj = {}
   // 2、把该对象的__proto__指向构造函数的原型对象prototype上
+  // 优化：使用Object.create创建新对象做继承，否则性能损耗很大
   obj.__proto__ = Object.create(ctor.prototype)
-  // 3、将构造函数的this指向新创建的对象
+  // 3、将构造函数的this指向新创建的对象，并拿到返回值
   let res = ctor.apply(obj, args)
   let isObject = typeof res === 'object' && res !== null
   let isFunction = typeof res === 'function'
