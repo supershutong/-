@@ -7,20 +7,27 @@
 Promise.all = function (iterator = []) {
   let arr = Array.from(iterator) // A+规范的参数是可迭代对象，未必是Array
   let count = 0,
+    result = [],
     len = arr.length
-  let result = []
   return new Promise((resolve, reject) => {
     for (let i in arr) {
       Promise.resolve(arr[i])
-        .then(data => {
-          result[i] = data
+        .then(
+          data => {
+            result[i] = { status: 'fullfilled', value: data }
+          },
+          reason => {
+            result[i] = { status: 'rejected', value: reason }
+          }
+        )
+        .catch(e => {
+          reject(e)
+        })
+        .finally(() => {
           count++
           if (count === len) {
             resolve(result)
           }
-        })
-        .catch(e => {
-          reject(e)
         })
     }
   })
@@ -32,7 +39,9 @@ var p1 = new Promise(resolve => {
 var p2 = new Promise(resolve => {
   setTimeout(resolve, 2000, '22') // setTimeout第三个参数作为毁掉函数入参
 })
-var p3 = 3
+var p3 = new Promise((resolve, reject) => {
+  reject(3)
+})
 
 Promise.all([p1, p2, p3]).then(
   data => {
