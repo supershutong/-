@@ -11,7 +11,7 @@ Promise.all = function (iterator = []) {
   let result = []
   return new Promise((resolve, reject) => {
     for (let i in arr) {
-      arr[i]
+      Promise.resolve(arr[i])
         .then(data => {
           result[i] = data
           count++
@@ -25,3 +25,20 @@ Promise.all = function (iterator = []) {
     }
   })
 }
+
+var p1 = new Promise(resolve => {
+  resolve(1)
+})
+var p2 = new Promise(resolve => {
+  setTimeout(resolve, 2000, '22') // setTimeout第三个参数作为毁掉函数入参
+})
+var p3 = 3
+
+Promise.all([p1, p2, p3]).then(
+  data => {
+    console.log(data)
+  },
+  err => {
+    console.log(err)
+  }
+)
