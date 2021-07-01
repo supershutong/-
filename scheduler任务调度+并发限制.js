@@ -1,3 +1,6 @@
+/** 头条笔试
+ * JS实现一个带并发限制的异步调度器Scheduler，保证同时运行的任务最多有两个。
+ */
 class Scheduler {
   constructor(limit) {
     this.limit = limit // 任务调度器允许并行的最大个数
@@ -25,18 +28,25 @@ class Scheduler {
 }
 
 let scheduler = new Scheduler(2)
-let task = function (n, time) {
-  return () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(n)
-      }, time)
+const timeout = time =>
+  new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+const addTask = (time, order) => {
+  scheduler
+    .add(() => timeout(time))
+    .then(() => {
+      console.log(order)
     })
-  }
 }
 
-scheduler.add(task(1, 2000)).then(res => console.log(res))
-scheduler.add(task(2, 1000)).then(res => console.log(res))
-scheduler.add(task(3, 1500)).then(res => console.log(res))
-scheduler.add(task(4, 1000)).then(res => console.log(res))
-scheduler.add(task(5, 3000)).then(res => console.log(res))
+addTask(1000, 1)
+addTask(500, 2)
+addTask(300, 3)
+addTask(400, 4)
+// output: 2 3 1 4
+// 开始时，1、2任务进入队列
+// 500ms输出 2，任务3入队
+// 800ms输出 3，任务4入队
+// 1000ms输出 1
+// 1200ms输出 4
