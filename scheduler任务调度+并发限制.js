@@ -4,7 +4,7 @@
 class Scheduler {
   constructor(limit) {
     this.limit = limit // 任务调度器允许并行的最大个数
-    this.count = 0
+    this.runningCount = 0
     this.list = [] // 待执行决议
   }
 
@@ -12,17 +12,17 @@ class Scheduler {
     if (typeof fn !== 'function') {
       throw new Error('paramter must be a function')
     }
-    if (this.count >= this.limit) {
+    if (this.runningCount >= this.limit) {
       await new Promise(resolve => {
         this.list.push(resolve)
       })
     }
-    this.count++
+    this.runningCount++
     const result = await fn()
     if (this.list.length > 0) {
       this.list.shift()() // 此处用两个括号执行resolve
     }
-    this.count--
+    this.runningCount--
     return result
   }
 }
