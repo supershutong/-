@@ -10,13 +10,12 @@ function fetchLimit(target = [], limit) {
   let result = new Map() // 记录url-response映射，并保证输出列表与输入一致
 
   function run() {
-    if (urls.length) {
-      const url = urls.shift()
-      return fetchData(url).then(res => {
-        result.set(url, res)
-        return run() // 递归请求url
-      })
-    }
+    if (!urls.length) return // 递归退出条件
+    const url = urls.shift()
+    return fetchData(url).then(res => {
+      result.set(url, res)
+      return run() // 递归
+    })
   }
 
   const promiseList = Array(Math.min(limit, target.length)) // 请求数小于limit时无需创建多余promise
@@ -27,11 +26,10 @@ function fetchLimit(target = [], limit) {
 }
 
 // fetchData 模拟异步请求，返回成功提示
-function fetchData(url) {
-  // 模拟响应时间在0 - 0.5s之间随机
-  const timeCost = Math.random() * 500
-  return new Promise(resolve => setTimeout(resolve, timeCost, 'get: ' + url))
-}
+let fetchData = url =>
+  new Promise(resolve =>
+    setTimeout(resolve, Math.random() * 500, url + ' 的响应')
+  )
 
 // 测试用例
 let urls = Array(10)
