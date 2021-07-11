@@ -1,21 +1,18 @@
 // 写一个循环红绿灯程序
-function changeColor(color, time) {
+function changeColor(color) {
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(color)
-    }, time)
+      console.log(`%c颜色为 ${color}`, `color:${color}`)
+      resolve()
+    }, 1000)
   })
 }
 
 async function trafficLight() {
-  let result
   while (true) {
-    result = await changeColor('red', 2000)
-    console.log(`%c现在颜色为 ${result}`, `color:${result}`)
-    result = await changeColor('yellow', 1000)
-    console.log(`%c现在颜色为 ${result}`, `color:${result}`)
-    result = await changeColor('green', 2000)
-    console.log(`%c现在颜色为 ${result}`, `color:${result}`)
+    await changeColor('red')
+    await changeColor('yellow')
+    await changeColor('green')
   }
 }
 
