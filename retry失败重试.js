@@ -9,11 +9,11 @@ Promise.retry = function (promiseFn, times = 3) {
       try {
         let result = await promiseFn()
         resolve(result)
-        console.log('success: ', result)
+        console.log(`success: ${result}`)
         break
       } catch (err) {
         if (!times) reject(err)
-        console.log('fail: ', times, '-----', err)
+        console.log(`fail: ${err}`)
       }
     }
   })
@@ -24,7 +24,7 @@ function getPromise() {
   const n = Math.random()
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      n > 0.9 ? resolve(n) : reject(n)
+      n > 0.5 ? resolve(n) : reject(n)
     }, 1000)
   })
 }
