@@ -46,10 +46,6 @@ function cloneDeep(obj, map = new WeakMap()) {
   return res
 }
 
-function cloneDeep(obj, map = new WeakMap()) {
-  if (typeof obj !== 'object' || obj === null) return obj
-}
-
 // 测试用例
 const map = new Map()
 map.set({ a: 1 }, '1')
