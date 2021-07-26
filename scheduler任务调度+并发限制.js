@@ -1,5 +1,9 @@
 /** 头条笔试
  * JS实现一个带并发限制的异步调度器Scheduler，保证同时运行的任务最多有两个。
+ * 1、如果超出最大并发数则放入待决议列表，计数+1；
+ * 2、await本次任务放入微任务队列并保存结果；
+ * 3、对队头任务进行决议，计数-1；
+ * 4、返回结果。
  */
 class Scheduler {
   constructor(limit) {
@@ -10,7 +14,7 @@ class Scheduler {
 
   async add(fn) {
     if (typeof fn !== 'function') {
-      throw new Error('paramter must be a function')
+      throw new TypeError('param must be a function')
     }
     if (this.runningCount >= this.limit) {
       await new Promise(resolve => {
@@ -19,7 +23,7 @@ class Scheduler {
     }
     this.runningCount++
     const result = await fn()
-    if (this.list.length > 0) {
+    if (this.list.length) {
       this.list.shift()() // 此处用两个括号执行resolve
     }
     this.runningCount--
